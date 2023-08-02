@@ -11,8 +11,9 @@ from requests.adapters import HTTPAdapter
 
 class NewsAPIConnection(ExperimentalBaseConnection[requests.session]):
     """
-    A class for handling a connection with the NewsAPI and retrieving news articles.
-    This class manages the connection session and allows querying the NewsAPI.
+    Handles a connection with the NewsAPI and retrieves news articles.
+
+    See also: https://docs.streamlit.io/library/advanced-features/connecting-to-data#build-your-own-connection
     """
 
     def _connect(self) -> requests.session:
@@ -66,10 +67,10 @@ class NewsAPIConnection(ExperimentalBaseConnection[requests.session]):
 
     def _to_dataframe(self, data: Optional[Dict[str, Any]]) -> Optional[pd.DataFrame]:
         """
-        Converts the JSON data containing articles into a DataFrame.
+        Converts the JSON data containing News Articles into a DataFrame.
 
         :param data: JSON data from the NewsAPI response
-        :return: DataFrame of News Articles or None if no Articles were found
+        :return: DataFrame of News Articles, None if no Articles were found
         """
         if data is None:
             return None
@@ -80,13 +81,12 @@ class NewsAPIConnection(ExperimentalBaseConnection[requests.session]):
     def query(self, topic: str, ttl: int = 3600) -> Optional[pd.DataFrame]:
         """
         Retrieves News Articles on a specific topic from the NewsAPI.
-
         The results are cached for a period specified by ttl.
 
         :param topic: Keywords or phrases to search for in the article title and body.
         :param ttl: Duration to cache the result (in seconds)
 
-        :return: DataFrame containing News Articles on the topic or None in case of an error
+        :return: DataFrame containing News Articles on the topic, None in case of an error
         """
         @cache_data(ttl=ttl)
         def _query(topic: str) -> Optional[pd.DataFrame]:
@@ -103,13 +103,12 @@ class NewsAPIConnection(ExperimentalBaseConnection[requests.session]):
     def top(self, country: str = 'US', category: str = '', ttl: int = 3600) -> Optional[pd.DataFrame]:
         """
         Retrieves Top-Headlines Articles in a specific country ('US' by default) and category from the NewsAPI.
-
         The results are cached for a period specified by ttl.
 
         :param country: The 2-letter ISO 3166-1 code of the country you want to get headlines for.
         :param category: The category of the news. Options include: 'business', 'entertainment', 'general', 'health', 'science', 'sports', 'technology'
         :param ttl: Duration to cache the result (in seconds)
-        :return: DataFrame containing the Top-Headlines Articles or None in case of an error
+        :return: DataFrame containing the Top-Headlines Articles, None in case of an error
         """
         @cache_data(ttl=ttl)
         def _query(country: str, category: str) -> Optional[pd.DataFrame]:
