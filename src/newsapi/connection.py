@@ -63,7 +63,7 @@ class NewsAPIConnection(ExperimentalBaseConnection[requests.session]):
             data = response.json()
             return data
         except (requests.exceptions.RequestException, ValueError) as e:
-            st.error(f'Error: {e} for URL: {url}')
+            st.error(f'NewsAPI Server Error')
             return None
 
     def _to_dataframe(self, data: Optional[Dict[str, Any]]) -> Optional[pd.DataFrame]:
