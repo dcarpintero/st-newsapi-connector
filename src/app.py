@@ -82,20 +82,33 @@ def display_news(df):
                 st.text(format_date(story["publishedAt"]))
 
 
-def layout(conn_newsapi, topic, category, country):
+def display_news_as_raw(df, fields):
+    if df is None:
+        st.info("No News")
+    else:
+        st.dataframe(df[fields])
+
+
+def layout(conn_newsapi, topic, category, country, fields):
     """
-    Layout
+    Defines Interface Layout
     """
     st.header("📰 Your Briefing Articles")
+    tab_topic, tab_headlines, tab_raw = st.tabs(
+        [topic, f'Top Stories in {category} ({country})', "Raw"])
 
     # Your Topic
-    st.subheader(f'{topic} ::')
-    display_news(conn_newsapi.query(topic))
+    with tab_topic:
+        display_news(conn_newsapi.query(topic))
 
     # Top Stories
-    st.subheader(f'Top Stories in {category} ({country}) ::')
-    display_news(conn_newsapi.top(country=get_country_code(country),
-                                  category=category))
+    with tab_headlines:
+        display_news(conn_newsapi.top(country=get_country_code(country),
+                                      category=category))
+
+    # Raw
+    with tab_raw:
+        display_news_as_raw(conn_newsapi.query(topic), fields)
 
 
 def main():
@@ -113,7 +126,7 @@ def main():
     conn_newsapi = st.experimental_connection(
         "NewsAPI", type=NewsAPIConnection)
     topic, category, country, fields = sidebar()
-    layout(conn_newsapi, topic, category, country)
+    layout(conn_newsapi, topic, category, country, fields)
 
 
 if __name__ == "__main__":
