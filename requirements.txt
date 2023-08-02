@@ -1,3 +1,4 @@
 pandas==1.5.1
 requests==2.31.0
 streamlit==1.25.0
+pycountry==22.3.5
