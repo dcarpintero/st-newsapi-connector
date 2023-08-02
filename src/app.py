@@ -5,101 +5,124 @@ Author:
     @dcarpintero : https://github.com/dcarpintero
 """
 import streamlit as st
-import pycountry
+
+from pycountry import countries
+from typing import List
+from datetime import datetime
+
 
 from newsapi.connection import NewsAPIConnection
 
-st.set_page_config(
-    page_title="Streamlit-NewsAPI Demo App",
-    page_icon="☘️",
-    layout="wide",
-    initial_sidebar_state="expanded",
-    menu_items={"About": "Made by @dcarpintero"},
-)
 
-_usr = {
-    "topic": "",
-    "category": "",
-    "country_code": "",
-    "yy_start": 2020,
-    "yy_end": 2023,
-}
-
-country_codes = ['ae', 'ar', 'at', 'au', 'be', 'bg', 'br', 'ca', 'ch', 'cn', 'co', 'cu', 'cz', 'de',
-                 'eg', 'fr', 'gb', 'gr', 'hk', 'hu', 'id', 'ie', 'il', 'in', 'it', 'jp', 'kr', 'lt',
-                 'lv', 'ma', 'mx', 'my', 'ng', 'nl', 'no', 'nz', 'ph', 'pl', 'pt', 'ro', 'rs', 'ru',
-                 'sa', 'se', 'sg', 'si', 'sk', 'th', 'tr', 'tw', 'ua', 'us', 've', 'za']
-
-country_names = [pycountry.countries.get(
-    alpha_2=code).name for code in country_codes]
-country_dict = dict(zip(country_names, country_codes))
-
-
-def _get_country_code(country_name: str) -> str:
-    """Returns the 2-letter country code for a given country name."""
+def get_country_code(name: str) -> str:
+    """Return the 2-letter country code for a given country name."""
     try:
-        return country_dict[country_name]
-    except KeyError:
-        raise ValueError(f'No country code found for "{country_name}"')
+        return countries.get(name=name).alpha_2
+    except AttributeError:
+        raise ValueError(f'No country code found for "{name}"')
+
+
+def get_country_names(codes: List[str]) -> List[str]:
+    """Return a list of country names for the given list of country codes."""
+    return [countries.get(alpha_2=code).name for code in codes]
+
+
+COUNTRY_CODES = [
+    'ae', 'ar', 'at', 'au', 'be', 'bg', 'br', 'ca', 'ch', 'cn', 'co', 'cu', 'cz', 'de', 'eg', 'fr', 'gb',
+    'gr', 'hk', 'hu', 'id', 'ie', 'il', 'in', 'it', 'jp', 'kr', 'lt', 'lv', 'ma', 'mx', 'my', 'ng', 'nl',
+    'no', 'nz', 'ph', 'pl', 'pt', 'ro', 'rs', 'ru', 'sa', 'se', 'sg', 'si', 'sk', 'th', 'tr', 'tw', 'ua',
+    'us', 've', 'za'
+]
+
+COUNTRY_NAMES = get_country_names(COUNTRY_CODES)
 
 
 def sidebar():
-    """
-    Defines User Options.
-    """
-    st.sidebar.header("NewsAPI")
-
-    Topic = st.sidebar.checkbox("Topic", value=True, disabled=False)
-    TopHeadlines = st.sidebar.checkbox(
-        "Top-Headlines", value=False, disabled=False)
-
+    """Configure the sidebar and return the user's preferences."""
     with st.sidebar.expander("Topic:", expanded=True):
-        _usr["topic"] = st.text_input(
-            'Keywords or phrases to search in the News', 'Tesla')
+        topic = st.text_input(
+            'Keywords or phrases to search in the News', 'ChatGPT')
 
     with st.sidebar.expander("Top-Headlines:", expanded=True):
-        _usr["category"] = st.selectbox(
-            'Category', ('Business', 'Entertainment', 'General', 'Health', 'Science', 'Sports', 'Technology'))
+        category = st.selectbox(
+            'Category', ('Business', 'Entertainment', 'General', 'Health', 'Science', 'Sports', 'Technology'), index=6)
 
-        _usr["country"] = st.selectbox(
-            'Country', (country_names))
+        country = st.selectbox('Country', COUNTRY_NAMES, index=51)
+
+    with st.sidebar.expander("Fields:", expanded=True):
+        fields = st.multiselect(
+            "Fields",
+            ['source', 'author', 'title', 'description',
+                'url', 'urlToImage', 'publishedAt', 'content'],
+            ['title', 'description', 'url', 'publishedAt'],
+            key="Fields",
+            label_visibility="hidden"
+        )
+
+    return topic, category, country, fields
 
 
-def layout():
+def layout(conn_newsapi, topic, category, country):
     """
-    Defines Interface Layout
+    Interface Layout
     """
-    news = st.experimental_connection("NewsAPI", type=NewsAPIConnection)
+    st.header("📰 Your Briefing Articles")
 
-    df = news.query('Tesla')
+    # Your Topic
+    st.subheader(f'{topic} ::')
 
+    df = conn_newsapi.query(topic)
     if df is None:
         st.info("No News")
     else:
-        st.write('Tesla News:')
-        st.dataframe(df.head(5))
+        for i in range(min(5, len(df))):
+            story = df.iloc[i]
+            col1, col2 = st.columns([1, 3])
+            with col1:
+                st.image(story["urlToImage"], width=150)
+            with col2:
+                st.markdown(f'[{story["title"]}]({story["url"]})')
 
-    df = news.top(country='US', category='Business')
+                date = datetime.strptime(
+                    story["publishedAt"], '%Y-%m-%dT%H:%M:%SZ')
+                st.text(date.strftime('%d %B %Y'))
+
+    # Top Stories
+    st.subheader(f'Top Stories in {category} ({country}) ::')
+
+    df = conn_newsapi.top(country=get_country_code(country), category=category)
     if df is None:
         st.info("No News")
     else:
-        st.write('Top Business News:')
-        st.dataframe(df.head(5))
+        for i in range(min(5, len(df))):
+            story = df.iloc[i]
+            col1, col2 = st.columns([1, 3])
+            with col1:
+                st.image(story["urlToImage"], width=150)
+            with col2:
+                st.markdown(f'[{story["title"]}]({story["url"]})')
 
-    df = news.top()
-    if df is None:
-        st.info("No News")
-    else:
-        st.write('Top News:')
-        st.dataframe(df.head(5))
+                date = datetime.strptime(
+                    story["publishedAt"], '%Y-%m-%dT%H:%M:%SZ')
+                st.text(date.strftime('%d %B %Y'))
 
 
 def main():
     """
-    Set up user preferences, and layout
+    Set up user preferences, and layout.
     """
-    sidebar()
-    layout()
+    st.set_page_config(
+        page_title="Streamlit-NewsAPI Demo App",
+        page_icon="📰",
+        layout="wide",
+        initial_sidebar_state="expanded",
+        menu_items={"About": "Built by @dcarpintero"},
+    )
+
+    conn_newsapi = st.experimental_connection(
+        "NewsAPI", type=NewsAPIConnection)
+    topic, category, country, fields = sidebar()
+    layout(conn_newsapi, topic, category, country)
 
 
 if __name__ == "__main__":
