@@ -14,6 +14,7 @@ class NewsAPIConnection(ExperimentalBaseConnection[requests.session]):
     Handles a connection with the NewsAPI and retrieves news articles.
 
     See also: https://docs.streamlit.io/library/advanced-features/connecting-to-data#build-your-own-connection
+              https://newsapi.org/docs 
     """
 
     def _connect(self) -> requests.session:
