@@ -9,20 +9,37 @@ from typing import Optional
 
 
 class NewsAPIConnection(ExperimentalBaseConnection):
-    """Basic st.experimental_connection implementation for NewsAPI"""
+    """Handles connection with the NewsAPI to retrieve news articles."""
 
     def _connect(self):
+        """Initializes parameters to connect with the NewsAPI."""
         self.key = st.secrets['NEWSAPI_KEY']
         self.base = st.secrets['NEWSAPI_BASE_URL']
 
     def query(self, topic: str, ttl: int = 3600) -> Optional[pd.DataFrame]:
+        """
+        Queries the NewsAPI for news articles on a given topic.
+        Data is cached for a duration given by ttl.
+        """
 
         @cache_data(ttl=ttl)
         def _query(topic: str) -> Optional[pd.DataFrame]:
+            """Performs the actual API call and data processing."""
             url = f"{self.base}everything?q={topic}&apiKey={self.key}"
-            response = requests.get(url)
-            data = response.json()
 
-            return pd.DataFrame(data['articles'])
+            try:
+                response = requests.get(url)
+                response.raise_for_status()
+                data = response.json()
+                articles = data.get('articles', None)
+
+                if articles is None:
+                    st.info('No News found')
+                    return None
+
+                return pd.DataFrame(articles)
+            except (requests.exceptions.RequestException, ValueError) as e:
+                st.error(f'Error: {e}')
+                return None
 
         return _query(topic)
