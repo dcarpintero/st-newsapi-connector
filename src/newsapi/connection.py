@@ -51,7 +51,7 @@ class NewsAPIConnection(ExperimentalBaseConnection):
 
         return _query(topic)
 
-    def top(self, country: str, category: str, ttl: int = 3600) -> Optional[pd.DataFrame]:
+    def top(self, country: str = 'US', category: str = '', ttl: int = 3600) -> Optional[pd.DataFrame]:
         """
         Queries the NewsAPI for top news articles in a given country (2-letter ISO 3166-1 code) and category.
         Data is cached for a duration given by ttl.
