@@ -43,11 +43,26 @@ class NewsAPIConnection(ExperimentalBaseConnection):
                 return None
 
             articles = data.get('articles', None)
-
-            if articles is None:
-                st.info('No News found')
-                return None
-
             return pd.DataFrame(articles)
 
         return _query(topic)
+
+    def top(self, country: str, category: str, ttl: int = 3600) -> Optional[pd.DataFrame]:
+        """
+        Queries the NewsAPI for top news articles in a given country (2-letter ISO 3166-1 code) and category.
+        Data is cached for a duration given by ttl.
+        """
+
+        @cache_data(ttl=ttl)
+        def _query(country: str, category: str) -> Optional[pd.DataFrame]:
+            """Performs the actual API call and data processing."""
+            url = f"{self.base}top-headlines?country={country}&category={category}&apiKey={self.key}"
+
+            data = self._make_api_request(url)
+            if data is None:
+                return None
+
+            articles = data.get('articles', None)
+            return pd.DataFrame(articles)
+
+        return _query(country, category)
