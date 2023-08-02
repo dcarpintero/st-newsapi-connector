@@ -5,7 +5,7 @@ import streamlit as st
 from streamlit.connections import ExperimentalBaseConnection
 from streamlit.runtime.caching import cache_data
 
-from typing import Optional
+from typing import Any, Dict, Optional
 
 
 class NewsAPIConnection(ExperimentalBaseConnection):
@@ -15,6 +15,17 @@ class NewsAPIConnection(ExperimentalBaseConnection):
         """Initializes parameters to connect with the NewsAPI."""
         self.key = st.secrets['NEWSAPI_KEY']
         self.base = st.secrets['NEWSAPI_BASE_URL']
+
+    def _make_api_request(self, url: str) -> Optional[Dict[str, Any]]:
+        """Makes a GET request to the provided URL and returns the parsed JSON response."""
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+            data = response.json()
+            return data
+        except (requests.exceptions.RequestException, ValueError) as e:
+            st.error(f'Error: {e}')
+            return None
 
     def query(self, topic: str, ttl: int = 3600) -> Optional[pd.DataFrame]:
         """
@@ -27,19 +38,16 @@ class NewsAPIConnection(ExperimentalBaseConnection):
             """Performs the actual API call and data processing."""
             url = f"{self.base}everything?q={topic}&apiKey={self.key}"
 
-            try:
-                response = requests.get(url)
-                response.raise_for_status()
-                data = response.json()
-                articles = data.get('articles', None)
-
-                if articles is None:
-                    st.info('No News found')
-                    return None
-
-                return pd.DataFrame(articles)
-            except (requests.exceptions.RequestException, ValueError) as e:
-                st.error(f'Error: {e}')
+            data = self._make_api_request(url)
+            if data is None:
                 return None
+
+            articles = data.get('articles', None)
+
+            if articles is None:
+                st.info('No News found')
+                return None
+
+            return pd.DataFrame(articles)
 
         return _query(topic)
