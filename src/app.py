@@ -27,6 +27,11 @@ def get_country_names(codes: List[str]) -> List[str]:
     return [countries.get(alpha_2=code).name for code in codes]
 
 
+def format_date(date_string: str) -> str:
+    date = datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%SZ')
+    return date.strftime('%d %B %Y')
+
+
 COUNTRY_CODES = [
     'ae', 'ar', 'at', 'au', 'be', 'bg', 'br', 'ca', 'ch', 'cn', 'co', 'cu', 'cz', 'de', 'eg', 'fr', 'gb',
     'gr', 'hk', 'hu', 'id', 'ie', 'il', 'in', 'it', 'jp', 'kr', 'lt', 'lv', 'ma', 'mx', 'my', 'ng', 'nl',
@@ -62,49 +67,35 @@ def sidebar():
     return topic, category, country, fields
 
 
+def display_news(df):
+    if df is None:
+        st.info("No News")
+    else:
+        for i in range(min(5, len(df))):
+            story = df.iloc[i]
+            col1, col2 = st.columns([1, 3])
+            with col1:
+                if story["urlToImage"] is not None:
+                    st.image(story["urlToImage"], width=150)
+            with col2:
+                st.markdown(f'[{story["title"]}]({story["url"]})')
+                st.text(format_date(story["publishedAt"]))
+
+
 def layout(conn_newsapi, topic, category, country):
     """
-    Interface Layout
+    Layout
     """
     st.header("📰 Your Briefing Articles")
 
     # Your Topic
     st.subheader(f'{topic} ::')
-
-    df = conn_newsapi.query(topic)
-    if df is None:
-        st.info("No News")
-    else:
-        for i in range(min(5, len(df))):
-            story = df.iloc[i]
-            col1, col2 = st.columns([1, 3])
-            with col1:
-                st.image(story["urlToImage"], width=150)
-            with col2:
-                st.markdown(f'[{story["title"]}]({story["url"]})')
-
-                date = datetime.strptime(
-                    story["publishedAt"], '%Y-%m-%dT%H:%M:%SZ')
-                st.text(date.strftime('%d %B %Y'))
+    display_news(conn_newsapi.query(topic))
 
     # Top Stories
     st.subheader(f'Top Stories in {category} ({country}) ::')
-
-    df = conn_newsapi.top(country=get_country_code(country), category=category)
-    if df is None:
-        st.info("No News")
-    else:
-        for i in range(min(5, len(df))):
-            story = df.iloc[i]
-            col1, col2 = st.columns([1, 3])
-            with col1:
-                st.image(story["urlToImage"], width=150)
-            with col2:
-                st.markdown(f'[{story["title"]}]({story["url"]})')
-
-                date = datetime.strptime(
-                    story["publishedAt"], '%Y-%m-%dT%H:%M:%SZ')
-                st.text(date.strftime('%d %B %Y'))
+    display_news(conn_newsapi.top(country=get_country_code(country),
+                                  category=category))
 
 
 def main():
