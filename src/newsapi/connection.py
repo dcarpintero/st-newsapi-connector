@@ -24,8 +24,16 @@ class NewsAPIConnection(ExperimentalBaseConnection):
             data = response.json()
             return data
         except (requests.exceptions.RequestException, ValueError) as e:
-            st.error(f'Error: {e}')
+            st.error(f'Error: {e} for URL: {url}')
             return None
+
+    def _to_dataframe(self, data: Optional[Dict[str, Any]]) -> Optional[pd.DataFrame]:
+        """Converts data to a DataFrame containing 'Articles', handling the case of no articles found."""
+        if data is None:
+            return None
+
+        articles = data.get('articles', None)
+        return pd.DataFrame(articles)
 
     def query(self, topic: str, ttl: int = 3600) -> Optional[pd.DataFrame]:
         """
@@ -39,11 +47,7 @@ class NewsAPIConnection(ExperimentalBaseConnection):
             url = f"{self.base}everything?q={topic}&apiKey={self.key}"
 
             data = self._make_api_request(url)
-            if data is None:
-                return None
-
-            articles = data.get('articles', None)
-            return pd.DataFrame(articles)
+            return self._to_dataframe(data)
 
         return _query(topic)
 
@@ -59,10 +63,6 @@ class NewsAPIConnection(ExperimentalBaseConnection):
             url = f"{self.base}top-headlines?country={country}&category={category}&apiKey={self.key}"
 
             data = self._make_api_request(url)
-            if data is None:
-                return None
-
-            articles = data.get('articles', None)
-            return pd.DataFrame(articles)
+            return self._to_dataframe(data)
 
         return _query(country, category)
