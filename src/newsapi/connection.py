@@ -1,9 +1,11 @@
-from streamlit.connections import ExperimentalBaseConnection
-from streamlit.runtime.caching import cache_data
+import requests
 import pandas as pd
 import streamlit as st
 
-import requests
+from streamlit.connections import ExperimentalBaseConnection
+from streamlit.runtime.caching import cache_data
+
+from typing import Optional
 
 
 class NewsAPIConnection(ExperimentalBaseConnection):
@@ -13,10 +15,10 @@ class NewsAPIConnection(ExperimentalBaseConnection):
         self.key = st.secrets['NEWSAPI_KEY']
         self.base = st.secrets['NEWSAPI_BASE_URL']
 
-    def query(self, topic: str, ttl: int = 3600) -> pd.DataFrame:
+    def query(self, topic: str, ttl: int = 3600) -> Optional[pd.DataFrame]:
 
         @cache_data(ttl=ttl)
-        def _query(topic: str) -> pd.DataFrame:
+        def _query(topic: str) -> Optional[pd.DataFrame]:
             url = f"{self.base}everything?q={topic}&apiKey={self.key}"
             response = requests.get(url)
             data = response.json()
