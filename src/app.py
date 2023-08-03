@@ -48,6 +48,9 @@ def sidebar():
     with st.sidebar.expander("🔎 TOPIC", expanded=True):
         topic = st.text_input(
             'Keywords or phrases to search in the News', 'ChatGPT')
+        topic = topic.strip()
+        if not topic:
+            st.warning('Please enter a valid topic.')
 
     with st.sidebar.expander("🔝 TOP-STORIES", expanded=True):
         category = st.selectbox(
@@ -65,14 +68,17 @@ def sidebar():
             label_visibility="hidden"
         )
 
-    return topic, category, country, fields
+    feed = st.sidebar.slider('Story Feed', min_value=0,
+                             max_value=100, value=5, step=5)
+
+    return topic, category, country, fields, feed
 
 
-def display_news(df):
+def display_news(df, feed=5):
     if df is None:
         st.info("No News")
     else:
-        for i in range(min(5, len(df))):
+        for i in range(min(feed, len(df))):
             story = df.iloc[i]
             col1, col2 = st.columns([1, 3])
             with col1:
@@ -90,7 +96,7 @@ def display_news_as_raw(df, fields):
         st.dataframe(df[fields], hide_index=True)
 
 
-def layout(conn_newsapi, topic, category, country, fields):
+def layout(conn_newsapi, topic, category, country, fields, feed):
     """
     Defines Interface Layout
     """
@@ -100,12 +106,13 @@ def layout(conn_newsapi, topic, category, country, fields):
 
     # Your Topic
     with tab_topic:
-        display_news(conn_newsapi.query(topic))
+        if topic:
+            display_news(conn_newsapi.query(topic), feed)
 
     # Top Stories
     with tab_headlines:
         display_news(conn_newsapi.top(country=get_country_code(country),
-                                      category=category))
+                                      category=category), feed)
 
     # Raw
     with tab_raw:
@@ -125,8 +132,8 @@ def main():
 
     conn_newsapi = st.experimental_connection(
         "NewsAPI", type=NewsAPIConnection)
-    topic, category, country, fields = sidebar()
-    layout(conn_newsapi, topic, category, country, fields)
+    topic, category, country, fields, feed = sidebar()
+    layout(conn_newsapi, topic, category, country, fields, feed)
 
 
 if __name__ == "__main__":
