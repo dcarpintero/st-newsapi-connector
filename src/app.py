@@ -44,17 +44,18 @@ COUNTRY_NAMES = get_country_names(COUNTRY_CODES)
 
 def sidebar():
     """Configure the sidebar and return the user's preferences."""
-    with st.sidebar.expander("Topic:", expanded=True):
+    st.sidebar.header("💡 Streamlit-NewsAPI-Connector")
+    with st.sidebar.expander("🔎 TOPIC", expanded=True):
         topic = st.text_input(
             'Keywords or phrases to search in the News', 'ChatGPT')
 
-    with st.sidebar.expander("Top-Headlines:", expanded=True):
+    with st.sidebar.expander("🔝 TOP-STORIES", expanded=True):
         category = st.selectbox(
-            'Category', ('Business', 'Entertainment', 'General', 'Health', 'Science', 'Sports', 'Technology'), index=6)
+            'Category', ('Business', 'Entertainment', 'General', 'Health', 'Science', 'Sports', 'Technology'), index=4)
 
         country = st.selectbox('Country', COUNTRY_NAMES, index=51)
 
-    with st.sidebar.expander("Fields:", expanded=True):
+    with st.sidebar.expander("🔧 FIELDS", expanded=True):
         fields = st.multiselect(
             "Fields",
             ['source', 'author', 'title', 'description',
@@ -86,7 +87,7 @@ def display_news_as_raw(df, fields):
     if df is None:
         st.info("No News")
     else:
-        st.dataframe(df[fields])
+        st.dataframe(df[fields], hide_index=True)
 
 
 def layout(conn_newsapi, topic, category, country, fields):
