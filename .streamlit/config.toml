@@ -1,7 +1,7 @@
 [logger]
 
 # Level of logging: 'error', 'warning', 'info', or 'debug'.
-level = "info"
+level = 'warning'
 
 # String format for logging messages. If logger.datetimeFormat is set, logger messages will default to `%(asctime)s.%(msecs)03d %(message)s`. See [Python's documentation](https://docs.python.org/2.6/library/logging.html#formatter-objects) for available attributes.
 # Default: "%(asctime)s %(message)s"
