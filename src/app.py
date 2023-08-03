@@ -119,7 +119,6 @@ def main():
     st.set_page_config(
         page_title="Streamlit-NewsAPI Demo App",
         page_icon="📰",
-        layout="wide",
         initial_sidebar_state="expanded",
         menu_items={"About": "Built by @dcarpintero with Streamlit & NewsAPI"},
     )
