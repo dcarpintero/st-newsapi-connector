@@ -1,6 +1,6 @@
 # 📰 Streamlit-NewsAPI Data Connector
 
-Connect to [NewsAPI](https://newsapi.org/) from your Streamlit app. Powered by st.experimental_connection(). Works with Streamlit >= 1.22. Read more about Streamlit Connections in the official docs. 
+Connect to [NewsAPI](https://newsapi.org/) from your Streamlit app. Powered by ```st.experimental_connection()```. Works with Streamlit >= 1.22. Read more about Streamlit Connections in the [official docs](https://blog.streamlit.io/introducing-st-experimental_connection/). 
 
 Contributions to this repo are welcome. If you are interested in helping to maintain it, reach out to us. 
 
@@ -79,15 +79,14 @@ streamlit==1.25.0
 
 ## 👩‍💻 Streamlit Web App
 
-Demo Web App available at https://newsapi-connector.streamlit.app/ 
+Demo Web App deployed to [Streamlit Cloud](https://streamlit.io/cloud) and available at https://newsapi-connector.streamlit.app/ 
 
 ![WebApp](./assets/st-newsapi-connector.png)
 
 ## 📚 References
 
-- [Experimental Connection](https://blog.streamlit.io/introducing-st-experimental_connection/)
 - [Experimental BaseConnection](https://docs.streamlit.io/library/api-reference/connections/st.connections.experimentalbaseconnection)
+- [Experimental Connection](https://blog.streamlit.io/introducing-st-experimental_connection/)
 - [Get Started with Streamlit Cloud](https://docs.streamlit.io/streamlit-community-cloud/get-started)
-- [NewsAPI](https://newsapi.org/)
-- [Streamlit Cloud](https://streamlit.io/cloud/)
+- [NewsAPI Dcoumentation](https://newsapi.org/docs)
 
