@@ -17,7 +17,7 @@ class NewsAPIConnection(ExperimentalBaseConnection[requests.session]):
               https://newsapi.org/docs 
     """
 
-    def _connect(self, **kwargs) -> requests.session:
+    def _connect(self) -> requests.session:
         """
         Initializes the connection parameters and creates a persistent requests.Session for connecting with the NewsAPI.
         The Session object uses an HTTPAdapter to allow for maximum retries in case of network issues.
