@@ -4,14 +4,11 @@ Connect to [NewsAPI](https://newsapi.org/) from your Streamlit app. Powered by `
 
 Contributions to this repo are welcome. If you are interested in helping to maintain it, reach out to us. 
 
-[![Made_withPython](https://img.shields.io/badge/Made%20With-Python-blue?style=for-the-badge&logo=Python)](https://www.steamlit.io/)
-[![Made_withStreamlit](https://img.shields.io/badge/Made%20With-Streamlit-red?style=for-the-badge&logo=Streamlit)](https://www.steamlit.io/)
-[![Made_withNewsAPI](https://img.shields.io/badge/Made%20With-NewsAPI-lightblue?style=for-the-badge)](https://newsapi.org/)
-
+[![Made_withPython](https://img.shields.io/badge/Made%20With-Python-blue?logo=Python)](https://www.steamlit.io/)
+[![Made_withNewsAPI](https://img.shields.io/badge/Made%20With-NewsAPI-lightblue)](https://newsapi.org/)
+[![Open_inStreamlit](https://img.shields.io/badge/Open%20In-Streamlit-red?logo=Streamlit)](https://newsapi-connector.streamlit.app/)
 
 ## 🚀 Quickstart
-
-In order to modify and/or deploy this application follow the steps below:
 
 1. Clone the repository:
 ```
