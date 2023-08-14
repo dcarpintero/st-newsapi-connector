@@ -17,7 +17,7 @@ class NewsAPIConnection(ExperimentalBaseConnection[requests.session]):
               https://newsapi.org/docs 
     """
 
-    def _connect(self) -> requests.session:
+    def _connect(self, **kwargs) -> requests.session:
         """
         Initializes the connection parameters and creates a persistent requests.Session for connecting with the NewsAPI.
         The Session object uses an HTTPAdapter to allow for maximum retries in case of network issues.
@@ -26,15 +26,15 @@ class NewsAPIConnection(ExperimentalBaseConnection[requests.session]):
 
         :return: A requests.Session object, with a mounted HTTPAdapter for connection retries
         """
-        self.key = st.secrets['NEWSAPI_KEY']
+        self.key = kwargs.get('NEWSAPI_KEY') or st.secrets['NEWSAPI_KEY']
         if not self.key:
             raise ValueError('Missing NEWSAPI_KEY')
 
-        self.base = st.secrets['NEWSAPI_BASE_URL']
+        self.base = kwargs.get('NEWSAPI_BASE_URL') or st.secrets['NEWSAPI_BASE_URL']
         if not self.base:
             raise ValueError('Missing NEWSAPI_BASE_URL')
 
-        self.retries = st.secrets.get('NEWSAPI_MAX_RETRIES', 5)
+        self.retries = kwargs.get('NEWSAPI_MAX_RETRIES') or st.secrets.get('NEWSAPI_MAX_RETRIES', 5)
 
         self.session = requests.Session()
         self.session.mount("https://", HTTPAdapter(max_retries=self.retries))
