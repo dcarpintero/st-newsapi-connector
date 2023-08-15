@@ -1,14 +1,23 @@
-[build-system]
-requires = ["setuptools", "wheel"]
-
-[project]
-name = "st-newsapi-connection"
+[tool.poetry]
+name = "st-newsapi-connector"
 version = "0.1.0"
 description = "A Python package to query data from NewsAPI in Streamlit apps"
-authors = [
-    {name = "D. Carpintero"}
-]
-readme = "README.md"
-license = {text = "MIT"}
-requires-python = ">=3.8.0"
-dependencies = ["streamlit >= 1.22.0"]
+authors = ["D. Carpintero"]
+license = "MIT"
+homepage = "https://st-newsapi-connector.streamlit.app/"
+repository = "https://github.com/dcarpintero/st-newsapi-connector"
+
+[tool.poetry.dependencies]
+python = "3.8"
+pandas = "1.5.1"
+pycountry = "22.3.5"
+requests = "2.31.0"
+streamlit = "1.25.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "7.4.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+

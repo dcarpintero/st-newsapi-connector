@@ -12,7 +12,7 @@ from typing import Any, Dict, List, Optional
 from datetime import datetime
 
 
-from newsapi.connection import NewsAPIConnection
+from st_newsapi_connector.connection import NewsAPIConnection
 
 
 def get_country_code(name: str) -> str:

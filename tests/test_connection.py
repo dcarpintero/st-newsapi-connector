@@ -1,5 +1,5 @@
 import pytest
-from newsapi.connection import NewsAPIConnection
+from st_newsapi_connector.connection import NewsAPIConnection
 
 
 @pytest.fixture
