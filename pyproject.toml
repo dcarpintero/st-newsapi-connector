@@ -4,6 +4,7 @@ version = "0.1.1"
 description = "A Python package to query data from NewsAPI in Streamlit apps"
 authors = ["D. Carpintero"]
 license = "MIT"
+readme = "README.md"
 homepage = "https://st-newsapi-connector.streamlit.app/"
 repository = "https://github.com/dcarpintero/st-newsapi-connector"
 
