@@ -8,6 +8,8 @@ Contributions to this repo are welcome. If you are interested in helping to main
 [![Made_withNewsAPI](https://img.shields.io/badge/Made%20With-NewsAPI-lightblue)](https://newsapi.org/)
 [![Open_inStreamlit](https://img.shields.io/badge/Open%20In-Streamlit-red?logo=Streamlit)](https://newsapi-connector.streamlit.app/)
 
+[![CodeFactor](https://www.codefactor.io/repository/github/dcarpintero/st-newsapi-connector/badge)](https://www.codefactor.io/repository/github/dcarpintero/st-newsapi-connector)
+
 ## 🚀 Quickstart
 
 1. Clone the repository:
