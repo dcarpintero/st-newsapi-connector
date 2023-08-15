@@ -1,0 +1,14 @@
+name: GitHub Actions 
+run-name: ${{ github.actor }} - GitHub Actions 🚀
+on: [push]
+jobs:
+  Codecov:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The branch is ${{ github.ref }} and the repository is ${{ github.repository }}."
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+            CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
