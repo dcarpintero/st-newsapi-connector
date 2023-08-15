@@ -38,7 +38,7 @@ pip install -r requirements.txt
 4. Launch Web Application
 
 ```
-streamlit run ./src/app.py
+streamlit run ./app.py
 ```
 
 ## 📄 Minimal Integration
@@ -52,11 +52,11 @@ from newsapi.connection import NewsAPIConnection
 conn_newsapi = st.experimental_connection("NewsAPI", type=NewsAPIConnection)
 
 # Retrieves News Articles on a specific topic from the NewsAPI
-df = conn_newsapi.query(topic="ChatGPT")
+df = conn_newsapi.everything(topic="ChatGPT")
 st.dataframe(df)
 
 # Retrieves Top-Headlines in a country and category from the NewsAPI
-df = conn_newsapi.top(country='US', category='Science')
+df = conn_newsapi.top_headlines(country='US', category='Science')
 st.dataframe(df)
 ```
 
