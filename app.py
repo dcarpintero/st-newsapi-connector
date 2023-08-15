@@ -5,9 +5,10 @@ Author:
     @dcarpintero : https://github.com/dcarpintero
 """
 import streamlit as st
+import pandas as pd
 
 from pycountry import countries
-from typing import List
+from typing import Any, Dict, List, Optional
 from datetime import datetime
 
 
@@ -30,6 +31,20 @@ def get_country_names(codes: List[str]) -> List[str]:
 def format_date(date_string: str) -> str:
     date = datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%SZ')
     return date.strftime('%d %B %Y')
+
+
+def to_dataframe(data: Optional[Dict[str, Any]]) -> Optional[pd.DataFrame]:
+    """
+    Converts the JSON data containing News Articles into a DataFrame.
+
+    :param data: JSON data from the NewsAPI response
+    :return: DataFrame of News Articles, None if no Articles were found
+    """
+    if data is None:
+        return None
+
+    articles = data.get('articles', None)
+    return pd.DataFrame(articles)
 
 
 COUNTRY_CODES = [
@@ -107,16 +122,22 @@ def layout(conn_newsapi, topic, category, country, fields, feed):
     # Your Topic
     with tab_topic:
         if topic:
-            display_news(conn_newsapi.query(topic), feed)
+            data = conn_newsapi.everything(q=topic)
+            df = to_dataframe(data)
+            display_news(df, feed)
 
     # Top Stories
     with tab_headlines:
-        display_news(conn_newsapi.top(country=get_country_code(country),
-                                      category=category), feed)
+        data = conn_newsapi.top_headlines(
+            country=get_country_code(country), category=category)
+        df = to_dataframe(data)
+        display_news(df, feed)
 
     # Raw
     with tab_raw:
-        display_news_as_raw(conn_newsapi.query(topic), fields)
+        data = conn_newsapi.everything(q=topic)
+        df = to_dataframe(data)
+        display_news_as_raw(df, fields)
 
 
 def main():

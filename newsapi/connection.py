@@ -1,5 +1,4 @@
 import requests
-import pandas as pd
 import streamlit as st
 
 from streamlit.connections import ExperimentalBaseConnection
@@ -30,11 +29,13 @@ class NewsAPIConnection(ExperimentalBaseConnection[requests.session]):
         if not self.key:
             raise ValueError('Missing NEWSAPI_KEY')
 
-        self.base = kwargs.get('NEWSAPI_BASE_URL') or st.secrets['NEWSAPI_BASE_URL']
+        self.base = kwargs.get(
+            'NEWSAPI_BASE_URL') or st.secrets['NEWSAPI_BASE_URL']
         if not self.base:
             raise ValueError('Missing NEWSAPI_BASE_URL')
 
-        self.retries = kwargs.get('NEWSAPI_MAX_RETRIES') or st.secrets.get('NEWSAPI_MAX_RETRIES', 5)
+        self.retries = kwargs.get('NEWSAPI_MAX_RETRIES') or st.secrets.get(
+            'NEWSAPI_MAX_RETRIES', 5)
 
         self.session = requests.Session()
         self.session.mount("https://", HTTPAdapter(max_retries=self.retries))
@@ -66,59 +67,57 @@ class NewsAPIConnection(ExperimentalBaseConnection[requests.session]):
             st.error(f'NewsAPI Server Error')
             return None
 
-    def _to_dataframe(self, data: Optional[Dict[str, Any]]) -> Optional[pd.DataFrame]:
-        """
-        Converts the JSON data containing News Articles into a DataFrame.
-
-        :param data: JSON data from the NewsAPI response
-        :return: DataFrame of News Articles, None if no Articles were found
-        """
-        if data is None:
-            return None
-
-        articles = data.get('articles', None)
-        return pd.DataFrame(articles)
-
-    def query(self, topic: str, ttl: int = 3600) -> Optional[pd.DataFrame]:
+    def everything(self, ttl: int = 3600, **kwargs) -> Optional[Dict[str, Any]]:
         """
         Retrieves News Articles on a specific topic from the NewsAPI.
         The results are cached for a period specified by ttl.
 
-        :param topic: Keywords or phrases to search for in the article title and body.
+        :param kwargs: Requests parameters as defined in https://newsapi.org/docs/endpoints/everything
         :param ttl: Duration to cache the result (in seconds)
 
-        :return: DataFrame containing News Articles on the topic, None in case of an error
+        :return: Dictionary containing:
+            - status: If the request was successful or not
+            - totalResults: The total number of results available for your request.
+            - articles: The results of the request.
         """
         @cache_data(ttl=ttl)
-        def _query(topic: str) -> Optional[pd.DataFrame]:
+        def _everything(**_kwargs) -> Optional[Dict[str, Any]]:
             """
             Performs the actual API call and data conversion.
             """
-            url = f"{self.base}everything?q={topic}&apiKey={self.key}"
+            params = "&".join(f"{key}={value}" for key, value in _kwargs.items())
+            url = f"{self.base}everything?{params}&apiKey={self.key}"
 
             data = self._make_api_request(url)
-            return self._to_dataframe(data)
+            if data.get('results') == 0 or data.get('status') != 'ok':
+                return None
+            return data
 
-        return _query(topic)
+        return _everything(**kwargs)
 
-    def top(self, country: str = 'US', category: str = '', ttl: int = 3600) -> Optional[pd.DataFrame]:
+    def top_headlines(self, ttl: int = 3600, **kwargs) -> Optional[Dict[str, Any]]:
         """
         Retrieves Top-Headlines Articles in a specific country ('US' by default) and category from the NewsAPI.
         The results are cached for a period specified by ttl.
 
-        :param country: The 2-letter ISO 3166-1 code of the country you want to get headlines for.
-        :param category: The category of the news. Options include: 'business', 'entertainment', 'general', 'health', 'science', 'sports', 'technology'
+        :param kwargs: Requests parameters as defined in https://newsapi.org/docs/endpoints/top-headlines
         :param ttl: Duration to cache the result (in seconds)
-        :return: DataFrame containing the Top-Headlines Articles, None in case of an error
+        :return: Dictionary containing:
+            - status: If the request was successful or not
+            - totalResults: The total number of results available for your request.
+            - articles: The results of the request.
         """
         @cache_data(ttl=ttl)
-        def _query(country: str, category: str) -> Optional[pd.DataFrame]:
+        def _top_headlines(**_kwargs) -> Optional[Dict[str, Any]]:
             """
             Performs the actual API call and data conversion.
             """
-            url = f"{self.base}top-headlines?country={country}&category={category}&apiKey={self.key}"
+            params = "&".join(f"{key}={value}" for key, value in _kwargs.items())
+            url = f"{self.base}top-headlines?{params}&apiKey={self.key}"
 
             data = self._make_api_request(url)
-            return self._to_dataframe(data)
+            if data.get('results') == 0 or data.get('status') != 'ok':
+                return None
+            return data
 
-        return _query(country, category)
+        return _top_headlines(**kwargs)
