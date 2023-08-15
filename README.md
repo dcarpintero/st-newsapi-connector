@@ -70,6 +70,9 @@ NEWSAPI_BASE_URL = 'https://newsapi.org/v2/'
 ```txt
 # requirements.txt
 
+pandas==1.5.1
+pycountry==22.3.5
+pytest==7.4.0
 requests==2.31.0
 streamlit==1.25.0
 ```
