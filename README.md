@@ -80,7 +80,7 @@ streamlit==1.25.0
 
 ## 👩‍💻 Streamlit Web App
 
-Demo Web App deployed to [Streamlit Cloud](https://streamlit.io/cloud) and available at https://newsapi-connector.streamlit.app/ 
+Demo Web App deployed to [Streamlit Cloud](https://streamlit.io/cloud) and available at https://st-newsapi-connector.streamlit.app/ 
 
 ![WebApp](./assets/st-newsapi-connector.png)
 
