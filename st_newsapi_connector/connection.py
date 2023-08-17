@@ -51,22 +51,6 @@ class NewsAPIConnection(ExperimentalBaseConnection[requests.session]):
             self._connect()
         return self.session
 
-    def _make_api_request(self, url: str) -> Optional[Dict[str, Any]]:
-        """
-        Performs a GET request to the provided URL and returns the parsed JSON response.
-
-        :param url: URL to send the GET request to
-        :return: JSON response data as a dictionary, None in case of an error
-        """
-        try:
-            response = self.cursor().get(url)
-            response.raise_for_status()
-            data = response.json()
-            return data
-        except (requests.exceptions.RequestException, ValueError) as e:
-            st.error(f'NewsAPI Server Error')
-            return None
-
     def everything(self, ttl: int = 3600, **kwargs) -> Optional[Dict[str, Any]]:
         """
         Retrieves News Articles on a specific topic from the NewsAPI.
@@ -85,13 +69,8 @@ class NewsAPIConnection(ExperimentalBaseConnection[requests.session]):
             """
             Performs the actual API call and data conversion.
             """
-            params = "&".join(f"{key}={value}" for key, value in _kwargs.items())
-            url = f"{self.base}everything?{params}&apiKey={self.key}"
-
-            data = self._make_api_request(url)
-            if data.get('results') == 0 or data.get('status') != 'ok':
-                return None
-            return data
+            url = f"{self.base}everything?apiKey={self.key}"
+            return self._make_api_request(url=url, params=_kwargs)
 
         return _everything(**kwargs)
 
@@ -112,12 +91,25 @@ class NewsAPIConnection(ExperimentalBaseConnection[requests.session]):
             """
             Performs the actual API call and data conversion.
             """
-            params = "&".join(f"{key}={value}" for key, value in _kwargs.items())
-            url = f"{self.base}top-headlines?{params}&apiKey={self.key}"
+            url = f"{self.base}top-headlines?apiKey={self.key}"
+            return self._make_api_request(url=url, params=_kwargs)
 
-            data = self._make_api_request(url)
+        return _top_headlines(**kwargs)
+
+    def _make_api_request(self, url: str, params: Dict[str, str]) -> Optional[Dict[str, Any]]:
+        """
+        Performs a GET request to the provided URL and returns the parsed JSON response.
+
+        :param url: URL to send the GET request to
+        :return: JSON response data as a dictionary, None in case of an error
+        """
+        try:
+            response = self.cursor().get(url=url, params=params)
+            response.raise_for_status()
+            data = response.json()
             if data.get('results') == 0 or data.get('status') != 'ok':
                 return None
             return data
-
-        return _top_headlines(**kwargs)
+        except (requests.exceptions.RequestException, ValueError) as e:
+            st.error(f'NewsAPI Server Error')
+            return None
