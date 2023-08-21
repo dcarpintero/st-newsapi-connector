@@ -1,3 +1,10 @@
+[![Open_inStreamlit](https://img.shields.io/badge/Open%20In-Streamlit-red?logo=Streamlit)](https://st-newsapi-connector.streamlit.app/)
+[![Python](https://img.shields.io/badge/python-%203.8-blue.svg)](https://www.python.org/)
+[![PyPi](https://img.shields.io/pypi/v/st-newsapi-connector)](https://pypi.org/project/st-newsapi-connector/)
+[![Build](https://img.shields.io/github/actions/workflow/status/dcarpintero/st-newsapi-connector/codecov.yml?branch=main)](https://pypi.org/keybert/)
+[![CodeFactor](https://www.codefactor.io/repository/github/dcarpintero/st-newsapi-connector/badge)](https://www.codefactor.io/repository/github/dcarpintero/st-newsapi-connector)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/dcarpintero/st-newsapi-connector/blob/main/LICENSE)
+
 # 📰 Streamlit-NewsAPI Data Connector
 
 <p align="center">
@@ -7,12 +14,6 @@
 Connect to [NewsAPI](https://newsapi.org/) from your Streamlit app. Powered by ```st.experimental_connection()```. Works with Streamlit >= 1.22. Read more about Streamlit Connections in the [official docs](https://blog.streamlit.io/introducing-st-experimental_connection/). 
 
 Contributions to this repo are welcome. If you are interested in helping to maintain it, reach out to us. 
-
-[![Made_withPython](https://img.shields.io/badge/Made%20With-Python-blue?logo=Python)](https://www.steamlit.io/)
-[![Made_withNewsAPI](https://img.shields.io/badge/Made%20With-NewsAPI-lightblue)](https://newsapi.org/)
-[![Open_inStreamlit](https://img.shields.io/badge/Open%20In-Streamlit-red?logo=Streamlit)](https://st-newsapi-connector.streamlit.app/)
-
-[![CodeFactor](https://www.codefactor.io/repository/github/dcarpintero/st-newsapi-connector/badge)](https://www.codefactor.io/repository/github/dcarpintero/st-newsapi-connector)
 
 ## 🚀 Quickstart
 
