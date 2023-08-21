@@ -84,7 +84,7 @@ def sidebar():
         )
 
     feed = st.sidebar.slider('Story Feed', min_value=0,
-                             max_value=100, value=5, step=5)
+                             max_value=100, value=10, step=5)
 
     return topic, category, country, fields, feed
 
