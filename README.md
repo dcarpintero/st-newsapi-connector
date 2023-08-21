@@ -1,7 +1,7 @@
 [![Open_inStreamlit](https://img.shields.io/badge/Open%20In-Streamlit-red?logo=Streamlit)](https://st-newsapi-connector.streamlit.app/)
 [![Python](https://img.shields.io/badge/python-%203.8-blue.svg)](https://www.python.org/)
 [![PyPi](https://img.shields.io/pypi/v/st-newsapi-connector)](https://pypi.org/project/st-newsapi-connector/)
-[![Build](https://img.shields.io/github/actions/workflow/status/dcarpintero/st-newsapi-connector/codecov.yml?branch=main)](https://pypi.org/keybert/)
+[![Build](https://img.shields.io/github/actions/workflow/status/dcarpintero/st-newsapi-connector/codecov.yml?branch=main)](https://pypi.org/project/st-newsapi-connector/)
 [![CodeFactor](https://www.codefactor.io/repository/github/dcarpintero/st-newsapi-connector/badge)](https://www.codefactor.io/repository/github/dcarpintero/st-newsapi-connector)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/dcarpintero/st-newsapi-connector/blob/main/LICENSE)
 
