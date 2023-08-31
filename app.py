@@ -28,8 +28,11 @@ def get_country_names(codes: List[str]) -> List[str]:
     return [countries.get(alpha_2=code).name for code in codes]
 
 
-def format_date(date_string: str) -> str:
-    date = datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%SZ')
+def format_date(date_string: str) -> Optional[str]:
+    try:
+        date = datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%SZ')
+    except:
+        return None
     return date.strftime('%d %B %Y')
 
 
@@ -95,13 +98,21 @@ def display_news(df, feed=5):
     else:
         for i in range(min(feed, len(df))):
             story = df.iloc[i]
-            col1, col2 = st.columns([1, 3])
-            with col1:
-                if story["urlToImage"] is not None:
-                    st.image(story["urlToImage"], width=150)
-            with col2:
-                st.markdown(f'[{story["title"]}]({story["url"]})')
-                st.text(format_date(story["publishedAt"]))
+
+            title = story["title"]
+            url = story["url"]
+            urlToImage = story["urlToImage"]
+            publishedAt = format_date(story["publishedAt"])
+
+            if title is not None:
+                if urlToImage is not None:
+                    if publishedAt is not None:
+                        col1, col2 = st.columns([1, 3])
+                        with col1:
+                            st.image(story["urlToImage"], width=150)
+                        with col2:
+                            st.markdown(f'[{title}]({url})')
+                            st.text(publishedAt)
 
 
 def display_news_as_raw(df, fields):
