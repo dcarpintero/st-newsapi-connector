@@ -65,7 +65,7 @@ def sidebar():
     st.sidebar.header("💡 Streamlit-NewsAPI-Connector")
     with st.sidebar.expander("🔎 TOPIC", expanded=True):
         topic = st.text_input(
-            'Keywords or phrases to search in the News', 'ChatGPT')
+            'Keywords or phrases to search in the News', 'AI, LLMs')
         topic = topic.strip()
         if not topic:
             st.warning('Please enter a valid topic.')
