@@ -105,14 +105,14 @@ def display_news(df, feed=5):
             publishedAt = format_date(story["publishedAt"])
 
             if title is not None:
-                if urlToImage is not None:
-                    if publishedAt is not None:
-                        col1, col2 = st.columns([1, 3])
-                        with col1:
-                            st.image(story["urlToImage"], width=150)
-                        with col2:
-                            st.markdown(f'[{title}]({url})')
-                            st.text(publishedAt)
+                if publishedAt is not None:
+                    col1, col2 = st.columns([1, 3])
+                    with col1:
+                        if urlToImage is not None:
+                            st.image(urlToImage, width=150)
+                    with col2:
+                        st.markdown(f'[{title}]({url})')
+                        st.text(publishedAt)
 
 
 def display_news_as_raw(df, fields):
