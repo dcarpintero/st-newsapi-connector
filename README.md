@@ -1,4 +1,4 @@
-[![Open_inStreamlit](https://img.shields.io/badge/Open%20In-Streamlit-red?logo=Streamlit)](https://st-newsapi-connector.streamlit.app/)
+[![Open_inStreamlit](https://img.shields.io/badge/Open%20In-Streamlit-red?logo=Streamlit)](https://newsapi-connector.streamlit.app/)
 [![Python](https://img.shields.io/badge/python-%203.8-blue.svg)](https://www.python.org/)
 [![PyPi](https://img.shields.io/pypi/v/st-newsapi-connector)](https://pypi.org/project/st-newsapi-connector/)
 [![Build](https://img.shields.io/github/actions/workflow/status/dcarpintero/st-newsapi-connector/codecov.yml?branch=main)](https://pypi.org/project/st-newsapi-connector/)
