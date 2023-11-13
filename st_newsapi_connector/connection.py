@@ -1,14 +1,14 @@
 import requests
 import streamlit as st
 
-from streamlit.connections import ExperimentalBaseConnection
+from streamlit.connections import BaseConnection
 from streamlit.runtime.caching import cache_data
 
 from typing import Any, Dict, Optional
 from requests.adapters import HTTPAdapter
 
 
-class NewsAPIConnection(ExperimentalBaseConnection[requests.session]):
+class NewsAPIConnection(BaseConnection[requests.session]):
     """
     Handles a connection with the NewsAPI and retrieves news articles.
 

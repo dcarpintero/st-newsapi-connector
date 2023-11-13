@@ -56,10 +56,10 @@ streamlit run ./app.py
 import streamlit as st
 from st_newsapi_connector.connection import NewsAPIConnection
 
-conn_newsapi = st.experimental_connection("NewsAPI", type=NewsAPIConnection)
+conn_newsapi = st.connection("NewsAPI", type=NewsAPIConnection)
 
 # Retrieves News Articles on a specific topic from the NewsAPI
-df = conn_newsapi.everything(topic="ChatGPT")
+df = conn_newsapi.everything(topic="AI, LLMs")
 st.dataframe(df)
 
 # Retrieves Top-Headlines in a country and category from the NewsAPI
@@ -80,7 +80,7 @@ NEWSAPI_BASE_URL = 'https://newsapi.org/v2/'
 pandas==1.5.1
 pycountry==22.3.5
 requests==2.31.0
-streamlit==1.25.0
+streamlit==1.28.1
 ```
 
 ## 👩‍💻 Streamlit Web App
@@ -89,8 +89,8 @@ Demo Web App deployed to [Streamlit Cloud](https://streamlit.io/cloud) and avail
 
 ## 📚 References
 
-- [Experimental BaseConnection](https://docs.streamlit.io/library/api-reference/connections/st.connections.experimentalbaseconnection)
-- [Experimental Connection](https://blog.streamlit.io/introducing-st-experimental_connection/)
+- [Streamlit BaseConnection](https://docs.streamlit.io/library/api-reference/connections/st.connections.baseconnection)
+- [Streamlit Connection](https://docs.streamlit.io/library/api-reference/connections/st.connection)
 - [Get Started with Streamlit Cloud](https://docs.streamlit.io/streamlit-community-cloud/get-started)
 - [NewsAPI Dcoumentation](https://newsapi.org/docs)
 

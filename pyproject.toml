@@ -13,7 +13,7 @@ python = "3.8"
 pandas = "1.5.1"
 pycountry = "22.3.5"
 requests = "2.31.0"
-streamlit = "1.25.0"
+streamlit = "1.28.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "7.4.0"

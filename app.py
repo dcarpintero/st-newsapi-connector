@@ -162,7 +162,7 @@ def main():
         menu_items={"About": "Built by @dcarpintero with Streamlit & NewsAPI"},
     )
 
-    conn_newsapi = st.experimental_connection(
+    conn_newsapi = st.connection(
         "NewsAPI", type=NewsAPIConnection)
     topic, category, country, fields, feed = sidebar()
     layout(conn_newsapi, topic, category, country, fields, feed)
