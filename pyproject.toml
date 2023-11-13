@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "st-newsapi-connector"
-version = "0.1.7"
+version = "0.1.8"
 description = "A Python package to query data from NewsAPI in Streamlit apps"
 authors = ["D. Carpintero"]
 license = "MIT"
