@@ -31,7 +31,7 @@ def get_country_names(codes: List[str]) -> List[str]:
 def format_date(date_string: str) -> Optional[str]:
     try:
         date = datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%SZ')
-    except:
+    except (ValueError, TypeError):
         return None
     return date.strftime('%d %B %Y')
 
