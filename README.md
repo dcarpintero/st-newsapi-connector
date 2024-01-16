@@ -78,7 +78,7 @@ NEWSAPI_BASE_URL = 'https://newsapi.org/v2/'
 pandas==1.5.1
 pycountry==22.3.5
 requests==2.31.0
-streamlit==1.28.1
+streamlit==1.30.1
 ```
 
 ## 👩‍💻 Streamlit Web App
