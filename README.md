@@ -11,7 +11,7 @@
   <img src="./assets/st-newsapi-connector.png">
 </p>
 
-Connect to [NewsAPI](https://newsapi.org/) from your Streamlit app. Powered by ```st.experimental_connection()```. Works with Streamlit >= 1.28. Read more about Streamlit Connections in the [official docs](https://blog.streamlit.io/introducing-st-experimental_connection/). 
+Connect to [NewsAPI](https://newsapi.org/) from your Streamlit app. Powered by ```st.connection()```. Works with Streamlit >= 1.28. Read more about Streamlit Connections in the [official docs](https://blog.streamlit.io/introducing-st-experimental_connection/). 
 
 Contributions to this repo are welcome. If you are interested in helping to maintain it, reach out to us. 
 
